@@ -51,7 +51,7 @@ class Chart extends React.Component {
                         text: "PSNR value"
                     },
                 },
-                yAxis: {
+                xAxis: {
                     title: {
                         text: "Build number"
                     },
