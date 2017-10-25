@@ -3,7 +3,7 @@ import 'highcharts';
 import ReactHighcharts from 'react-highcharts';
 
 /**
- * Component representing a single char
+ * Component representing a single chart
  */
 class Chart extends React.Component {
     /**
@@ -25,17 +25,16 @@ class Chart extends React.Component {
         fetch('./psnrResults')
             .then(res => {
                 if (res.status === 200) {
-                    res.json().then(jsonData => {
+                    return res.json().then(jsonData => {
                         console.log(jsonData);
                         this.setState({
                             data: jsonData.map(jd => [ jd.buildNum, jd.psnr ])
                         });
                     });
-                } else {
-                    this.setState({
-                        error: 'Error retrieving psnr results'
-                    });
                 }
+                this.setState({
+                    error: 'Error retrieving psnr results'
+                });
             })
             .catch(err => {
                 this.setState({
