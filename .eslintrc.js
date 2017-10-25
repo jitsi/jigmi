@@ -1,8 +1,8 @@
 module.exports = {
     'extends': [
-        'eslint-config-jitsi',
         'eslint:recommended',
-        'plugin:react/recommended'
+        'plugin:react/recommended',
+        'eslint-config-jitsi'
     ],
     'plugins': [
         'react'
