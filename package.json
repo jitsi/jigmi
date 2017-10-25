@@ -27,14 +27,20 @@
     "webpack": "3.8.1"
   },
   "devDependencies": {
+    "babel-eslint": "8.0.1",
+    "eslint": "4.8.0",
+    "eslint-config-jitsi": "*",
+    "eslint-plugin-flowtype": "2.39.1",
+    "eslint-plugin-import": "2.8.0",
+    "eslint-plugin-react": "7.4.0"
   },
   "scripts": {
+    "lint": "eslint .",
     "postinstall": "webpack",
     "validate": "npm ls",
     "start": "node server.js"
   },
-  "pre-commit": [
-  ],
+  "pre-commit": [],
   "main": "./index.js",
   "license": "Apache-2.0"
 }

@@ -1,29 +1,31 @@
-var config = {
-   entry: './index.js',
+/* global __dirname */
 
-   output: {
-      path:__dirname + '/lib',
-      filename: 'bundle.js',
-   },
+const config = {
+    entry: './index.js',
 
-   devServer: {
-      inline: true,
-      port: 8080
-   },
+    output: {
+        path: `${__dirname}/lib`,
+        filename: 'bundle.js'
+    },
 
-   module: {
-      loaders: [
-         {
-            test: /\.js?$/,
-            exclude: /node_modules/,
-            loader: 'babel-loader',
+    devServer: {
+        inline: true,
+        port: 8080
+    },
 
-            query: {
-               presets: ['es2015', 'react']
+    module: {
+        loaders: [
+            {
+                test: /\.js?$/,
+                exclude: /node_modules/,
+                loader: 'babel-loader',
+
+                query: {
+                    presets: [ 'es2015', 'react' ]
+                }
             }
-         }
-      ]
-   },
-}
+        ]
+    }
+};
 
 module.exports = config;

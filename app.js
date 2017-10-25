@@ -1,9 +1,15 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import 'highcharts';
 import ReactHighcharts from 'react-highcharts';
 
+/**
+ * Component representing a single char
+ */
 class Chart extends React.Component {
+    /**
+     * Create a new chart
+     * @param props props of the chart
+     */
     constructor(props) {
         super(props);
         this.state = {
@@ -12,19 +18,22 @@ class Chart extends React.Component {
         };
     }
 
+    /**
+     * @inheritdoc
+     */
     componentDidMount() {
-        fetch("./psnrResults")
+        fetch('./psnrResults')
             .then(res => {
-                if (res.status !== 200) {
-                    this.setState({
-                        error: "Error retrieving psnr results"
-                    });
-                } else {
+                if (res.status === 200) {
                     res.json().then(jsonData => {
                         console.log(jsonData);
                         this.setState({
-                            data: jsonData.map(jd => [jd.buildNum, jd.psnr])
+                            data: jsonData.map(jd => [ jd.buildNum, jd.psnr ])
                         });
+                    });
+                } else {
+                    this.setState({
+                        error: 'Error retrieving psnr results'
                     });
                 }
             })
@@ -35,6 +44,9 @@ class Chart extends React.Component {
             });
     }
 
+    /**
+     * @inheritdoc
+     */
     render() {
         if (this.state.error) {
             return (
@@ -44,34 +56,43 @@ class Chart extends React.Component {
         if (this.state.data) {
             const config = {
                 title: {
-                    text: "PSNR"
+                    text: 'PSNR'
                 },
                 yAxis: {
                     title: {
-                        text: "PSNR value"
-                    },
+                        text: 'PSNR value'
+                    }
                 },
                 xAxis: {
                     title: {
-                        text: "Build number"
-                    },
+                        text: 'Build number'
+                    }
                 },
-                series: [{
-                    data: this.state.data
-                }]
-            }
+                series: [
+                    {
+                        data: this.state.data
+                    }
+                ]
+            };
+
             return (
                 <ReactHighcharts config = {config}></ReactHighcharts>
             );
-        } else {
-            return (
-                <div>Loading...</div>
-            );
         }
+
+        return (
+            <div>Loading...</div>
+        );
     }
 }
 
+/**
+ * Component for displaying the top-level dashboard
+ */
 class Dashboard extends React.Component {
+    /**
+     * @inheritdoc
+     */
     render() {
         return (
             <Chart />
