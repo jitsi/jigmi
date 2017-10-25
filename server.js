@@ -7,6 +7,7 @@ const http = require('http');
 const path = require('path');
 const Sequelize = require('sequelize');
 const sqlite3 = require('sqlite3');
+const PsnrResult = require('./model/psnrResult');
 
 const DB_LOCATION = './db';
 
@@ -34,15 +35,20 @@ sequelize
 // http://docs.sequelizejs.com/manual/tutorial/models-definition.html#timestamps
 // but keep in mind we'll need to handle those fields on our own if we
 // add a migration
-const PsnrResult = sequelize.define('psnrResult', {
-    buildNum: { type: Sequelize.INTEGER, primaryKey: true },
-    buildUrl: { type: Sequelize.STRING },
-    psnrValue: { type: Sequelize.FLOAT }
+//const PsnrResult = sequelize.define('psnrResult', {
+//    buildNum: { type: Sequelize.INTEGER, primaryKey: true },
+//    buildUrl: { type: Sequelize.STRING },
+//    psnrValue: { type: Sequelize.FLOAT }
+//});
+
+const FrameSkipResult = sequelize.define('frameSkipResult', {
+
 });
 
 // If we need to sync other tables in the future we can
 // chain them here
-const initializationPromise = PsnrResult.sync();
+const initializationPromise = Promise.resolve(); //PsnrResult.sync();
+PsnrResult.init(sequelize);
 
 const app = express();
 
