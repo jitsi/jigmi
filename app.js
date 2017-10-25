@@ -28,7 +28,7 @@ class Chart extends React.Component {
                     return res.json().then(jsonData => {
                         console.log(jsonData);
                         this.setState({
-                            data: jsonData.map(jd => [ jd.buildNum, jd.psnr ])
+                            data: jsonData.map(jd => [ jd.buildNum, jd.psnrValue ])
                         });
                     });
                 }

@@ -2,3 +2,4 @@ db/*
 lib/*
 node_modules/*
 npm-debug.log
+*.swp
