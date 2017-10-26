@@ -33,23 +33,12 @@ sequelize
         console.log("Error connecting to db: ", err);
     });
 
-//TODO: generically init all models(?)
-//they'd still need to be imported directly to be used
-//fs.readdirSync(MODELS_PATH)
-//    .filter(file => file.slice(-3) === '.js')
-//    .map(file => {
-//        const model = require(path.join(MODELS_PATH, file)); // erroring, unable to find file for some reason
-//        model.init(sequelize);
-//    });
-PsnrResult.init(sequelize);
-FrameSkipResult.init(sequelize);
+require('./models')(sequelize);
 
 const initializationPromise = sequelize.sync();
 
 const app = express();
-
 app.use(bodyParser.json());
-
 app.use('/lib', express.static('lib'));
 
 app.get('/', (req, res) => {
@@ -57,74 +46,9 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/index.html'));
 });
 
-app.post('/psnrResult', (req, res) => {
-    const { buildNum, buildUrl, psnrValue } = req.body;
-
-    console.log(`received psnr ${psnrValue}`
-        + ` for build num ${buildNum}`
-        + ` url ${buildUrl}`);
-
-    PsnrResult.create({
-        buildNum,
-        buildUrl,
-        psnrValue
-    })
-    .then((createdPsnrResult) => { // eslint-disable-line no-unused-vars
-        res.sendStatus(200);
-    })
-    .catch(err => {
-        console.log("Error inserting psnrResult: ", err);
-        res.sendStatus(500);
-    });
-});
-
-app.post('/frameSkipResult', (req, res) => {
-    const { buildNum, buildUrl, frameSkipPercentage } = req.body;
-
-    console.log(`received frame skip pct ${frameSkipPercentage}`
-        + ` for build num ${buildNum}`
-        + ` url ${buildUrl}`);
-
-    FrameSkipResult.create({
-        buildNum,
-        buildUrl,
-        frameSkipPercentage
-    })
-    .then((createdFrameSkipResult) => { // eslint-disable-line no-unused-vars
-        res.sendStatus(200);
-    })
-    .catch(err => {
-        console.log("Error inserting frameSkipResult: ", err);
-        res.sendStatus(500);
-    });
-});
-
-app.get('/psnrResults', (req, res) => {
-    PsnrResult.findAll().then(psnrResults => {
-        console.log('got results: \n',
-           psnrResults.map(result => result.toJSON()));
-        res.send(psnrResults.map(result => result.toJSON()));
-    })
-    .catch(err => {
-        console.log("Error querying psnr results");
-        res.sendStatus(500);
-    });
-});
-
-app.get('/frameSkipResults', (req, res) => {
-    FrameSkipResult.findAll().then(frameSkipResults => {
-        console.log('got results: \n',
-           frameSkipResults.map(result => result.toJSON()));
-        res.send(frameSkipResults.map(result => result.toJSON()));
-    })
-    .catch(err => {
-        console.log("Error querying psnr results");
-        res.sendStatus(500);
-    });
-});
+require('./routes')(app);
 
 const port = process.env.PORT || 8000;
-
 
 // Sync the db
 sequelize.sync().then(() => {
