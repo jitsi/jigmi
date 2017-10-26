@@ -7,8 +7,6 @@ const http = require('http');
 const path = require('path');
 const Sequelize = require('sequelize');
 const sqlite3 = require('sqlite3');
-const PsnrResult = require('./models/psnrResult');
-const FrameSkipResult = require('./models/frameSkipResult');
 
 const DB_LOCATION = './db';
 const MODELS_PATH = './models/';
