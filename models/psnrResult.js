@@ -6,9 +6,15 @@ module.exports = class PsnrResult extends BaseModel {
      * Initialize this model
      */
     static init(sequelize) {
-        return super.init({
-            psnrValue: { type: Sequelize.FLOAT }
-        },
-        { sequelize });
+        return super.init(
+            {
+                psnrValue: {
+                    type: Sequelize.FLOAT
+                }
+            },
+            {
+                sequelize
+            }
+        );
     }
 };

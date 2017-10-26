@@ -24,8 +24,6 @@ module.exports = function(app) {
 
     app.get('/frameSkipResults', (req, res) => {
         FrameSkipResult.findAll().then(frameSkipResults => {
-            console.log('got results: \n',
-               frameSkipResults.map(result => result.toJSON()));
             res.send(frameSkipResults.map(result => result.toJSON()));
         })
         .catch(err => {

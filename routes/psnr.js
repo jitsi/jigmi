@@ -24,8 +24,6 @@ module.exports = function(app) {
 
     app.get('/psnrResults', (req, res) => {
         PsnrResult.findAll().then(psnrResults => {
-            console.log('got results: \n',
-               psnrResults.map(result => result.toJSON()));
             res.send(psnrResults.map(result => result.toJSON()));
         })
         .catch(err => {
