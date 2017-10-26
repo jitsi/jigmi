@@ -29,7 +29,8 @@ module.exports = class Chart extends React.Component {
         }
         if (this.state.data) {
             return (
-                <ReactHighcharts config = {this.getChartConfig()}></ReactHighcharts>
+                <ReactHighcharts config =
+                    {this.getChartConfig()}></ReactHighcharts>
             );
         }
 
@@ -47,10 +48,9 @@ module.exports = class Chart extends React.Component {
         return fetch(endpoint)
             .then(res => {
                 if (res.status === 200) {
-                    return res.json().then(jsonData => {
-                        return jsonData.map(jsonMapFunc);
-                    });
+                    return res.json()
+                        .then(jsonData => jsonData.map(jsonMapFunc));
                 }
-            })
+            });
     }
-}
+};

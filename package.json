@@ -40,7 +40,7 @@
     "lint": "eslint .",
     "postinstall": "webpack",
     "start": "node server.js",
-    "precommit": "npm lint"
+    "precommit": "npm run-script lint"
   },
   "main": "./index.js",
   "license": "Apache-2.0"

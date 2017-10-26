@@ -13,11 +13,11 @@ module.exports = function(app) {
             buildUrl,
             frameSkipPercentage
         })
-        .then((createdFrameSkipResult) => { // eslint-disable-line no-unused-vars
+        .then(createdFrameSkipResult => { // eslint-disable-line no-unused-vars
             res.sendStatus(200);
         })
         .catch(err => {
-            console.log("Error inserting frameSkipResult: ", err);
+            console.log(`Error inserting frameSkipResult: ${err}`);
             res.sendStatus(500);
         });
     });
@@ -29,7 +29,7 @@ module.exports = function(app) {
             res.send(frameSkipResults.map(result => result.toJSON()));
         })
         .catch(err => {
-            console.log("Error querying psnr results");
+            console.log(`Error querying psnr results: ${err}`);
             res.sendStatus(500);
         });
     });

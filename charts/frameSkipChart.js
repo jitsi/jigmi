@@ -1,10 +1,9 @@
 import Chart from './baseChart';
 
 module.exports = class FrameSkipResultsChart extends Chart {
-    constructor(props) {
-        super(props);
-    }
-
+    /**
+     * Get the config for this chart to be passed to highcharts
+     */
     getChartConfig() {
         return {
             title: {
@@ -28,9 +27,12 @@ module.exports = class FrameSkipResultsChart extends Chart {
         };
     }
 
+    /**
+     * @inheritdoc
+     */
     componentDidMount() {
-        const jsonResultsFunc =
-            jsonData => [ jsonData.buildNum, jsonData.frameSkipPercentage ];
+        const jsonResultsFunc
+            = jsonData => [ jsonData.buildNum, jsonData.frameSkipPercentage ];
 
         this._retrieveResultsHelper('./frameSkipResults', jsonResultsFunc)
             .then(jsonResult => this.setState({ data: jsonResult }))

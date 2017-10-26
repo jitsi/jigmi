@@ -13,11 +13,11 @@ module.exports = function(app) {
             buildUrl,
             psnrValue
         })
-        .then((createdPsnrResult) => { // eslint-disable-line no-unused-vars
+        .then(createdPsnrResult => { // eslint-disable-line no-unused-vars
             res.sendStatus(200);
         })
         .catch(err => {
-            console.log("Error inserting psnrResult: ", err);
+            console.log(`Error inserting psnrResult: ${err}`);
             res.sendStatus(500);
         });
     });
@@ -29,7 +29,7 @@ module.exports = function(app) {
             res.send(psnrResults.map(result => result.toJSON()));
         })
         .catch(err => {
-            console.log("Error querying psnr results");
+            console.log(`Error querying psnr results: ${err}`);
             res.sendStatus(500);
         });
     });
