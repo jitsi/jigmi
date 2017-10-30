@@ -31,16 +31,16 @@ class Chart extends React.Component {
         if (this.state.data) {
             const config = {
                 title: {
-                    text: this.props.config.graphTitle
+                    text: this.props.graphTitle
                 },
                 yAxis: {
                     title: {
-                        text: this.props.config.graphYAxis
+                        text: this.props.graphYAxis
                     }
                 },
                 xAxis: {
                     title: {
-                        text: this.props.config.graphXAxis
+                        text: this.props.graphXAxis
                     }
                 },
                 series: this.state.data
@@ -63,7 +63,16 @@ class Chart extends React.Component {
     componentDidMount() {
         const config = this.props.config;
 
-        this._retrieveResultsHelper(config.resultsUrl, config.resultsFunc)
+        this._retrieveResultsHelper(config.resultsUrl)
+            .then(jsonData => {
+                const resultData = [];
+
+                config.resultTransformers.forEach(transformer => {
+                    resultData.push(transformer(jsonData));
+                });
+
+                return resultData;
+            })
             .then(jsonResult => this.setState({ data: jsonResult }))
             .catch(err => this.setState({ error: err }));
     }
@@ -73,18 +82,20 @@ class Chart extends React.Component {
      * transform the response to json and apply the given function on the
      * results.  Returns a promise with the results.
      */
-    _retrieveResultsHelper(endpoint, jsonTransformFunc) {
+    _retrieveResultsHelper(endpoint) {
         return fetch(endpoint)
             .then(res => {
                 if (res.status === 200) {
-                    return res.json()
-                        .then(jsonData => jsonTransformFunc(jsonData));
+                    return res.json();
                 }
             });
     }
 }
 
 Chart.propTypes = {
+    graphTitle: PropTypes.string,
+    graphXAxis: PropTypes.string,
+    graphYAxis: PropTypes.string,
     config: PropTypes.object
 };
 
