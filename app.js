@@ -29,6 +29,9 @@ class Dashboard extends React.Component {
                     graphXAxis='Build number'
                     config={{
                         resultsUrl: './psnrResults',
+
+                        // Each transformer results in a different line
+                        // for the same chart
                         resultTransformers: [
                             jsonData => frameResultTransformer(
                                 jsonData, 'numSkippedFrames'),
