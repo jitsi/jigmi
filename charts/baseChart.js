@@ -1,11 +1,12 @@
 import 'highcharts';
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactHighcharts from 'react-highcharts';
 
 /**
  * Component representing a single chart
  */
-module.exports = class Chart extends React.Component {
+class Chart extends React.Component {
     /**
      * Create a new chart
      * @param props props of the chart
@@ -28,9 +29,26 @@ module.exports = class Chart extends React.Component {
             );
         }
         if (this.state.data) {
+            const config = {
+                title: {
+                    text: this.props.config.graphTitle
+                },
+                yAxis: {
+                    title: {
+                        text: this.props.config.graphYAxis
+                    }
+                },
+                xAxis: {
+                    title: {
+                        text: this.props.config.graphXAxis
+                    }
+                },
+                series: this.state.data
+            };
+
             return (
                 <ReactHighcharts config =
-                    {this.getChartConfig()}></ReactHighcharts>
+                    {config}></ReactHighcharts>
             );
         }
 
@@ -40,17 +58,34 @@ module.exports = class Chart extends React.Component {
     }
 
     /**
+     * @inheritdoc
+     */
+    componentDidMount() {
+        const config = this.props.config;
+
+        this._retrieveResultsHelper(config.resultsUrl, config.resultsFunc)
+            .then(jsonResult => this.setState({ data: jsonResult }))
+            .catch(err => this.setState({ error: err }));
+    }
+
+    /**
      * Retrieve results from the given endpoint.  If retrieved successfully,
      * transform the response to json and apply the given function on the
      * results.  Returns a promise with the results.
      */
-    _retrieveResultsHelper(endpoint, jsonMapFunc) {
+    _retrieveResultsHelper(endpoint, jsonTransformFunc) {
         return fetch(endpoint)
             .then(res => {
                 if (res.status === 200) {
                     return res.json()
-                        .then(jsonData => jsonData.map(jsonMapFunc));
+                        .then(jsonData => jsonTransformFunc(jsonData));
                 }
             });
     }
+}
+
+Chart.propTypes = {
+    config: PropTypes.object
 };
+
+module.exports = Chart;
