@@ -1,17 +1,30 @@
-const PsnrResult = require('../models/psnrResult');
+const PsnrResult = require('../models/db/psnrResult');
 
 module.exports = function(app) {
     app.post('/psnrResult', (req, res) => {
-        const { buildNum, buildUrl, psnrValue } = req.body;
+        const {
+            buildNum,
+            buildUrl,
+            psnr,
+            numFrozenFrames,
+            numSkippedFrames,
+            totalFrames
+        } = req.body;
 
-        console.log(`received psnr ${psnrValue}`
+        console.log(`received psnr ${psnr},`
+            + ` numFrozenFrames ${numFrozenFrames},`
+            + ` numSkippedFrames ${numSkippedFrames},`
+            + ` totalFrames ${totalFrames},`
             + ` for build num ${buildNum}`
             + ` url ${buildUrl}`);
 
         PsnrResult.create({
             buildNum,
             buildUrl,
-            psnrValue
+            psnr,
+            numFrozenFrames,
+            numSkippedFrames,
+            totalFrames
         })
         .then(createdPsnrResult => { // eslint-disable-line no-unused-vars
             res.sendStatus(200);

@@ -8,8 +8,17 @@ module.exports = class PsnrResult extends BaseModel {
     static init(sequelize) {
         return super.init(
             {
-                psnrValue: {
+                psnr: {
                     type: Sequelize.FLOAT
+                },
+                numFrozenFrames: {
+                    type: Sequelize.INTEGER
+                },
+                numSkippedFrames: {
+                    type: Sequelize.INTEGER
+                },
+                totalFrames: {
+                    type: Sequelize.INTEGER
                 }
             },
             {

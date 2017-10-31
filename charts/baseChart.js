@@ -1,11 +1,12 @@
 import 'highcharts';
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactHighcharts from 'react-highcharts';
 
 /**
  * Component representing a single chart
  */
-module.exports = class Chart extends React.Component {
+class Chart extends React.Component {
     /**
      * Create a new chart
      * @param props props of the chart
@@ -27,10 +28,27 @@ module.exports = class Chart extends React.Component {
                 <div>Error: {this.state.error}</div>
             );
         }
-        if (this.state.data) {
+        if (this.props.data) {
+            const config = {
+                title: {
+                    text: this.props.graphTitle
+                },
+                yAxis: {
+                    title: {
+                        text: this.props.graphYAxis
+                    }
+                },
+                xAxis: {
+                    title: {
+                        text: this.props.graphXAxis
+                    }
+                },
+                series: this.props.data
+            };
+
             return (
                 <ReactHighcharts config =
-                    {this.getChartConfig()}></ReactHighcharts>
+                    {config}></ReactHighcharts>
             );
         }
 
@@ -38,19 +56,14 @@ module.exports = class Chart extends React.Component {
             <div>Loading...</div>
         );
     }
+}
 
-    /**
-     * Retrieve results from the given endpoint.  If retrieved successfully,
-     * transform the response to json and apply the given function on the
-     * results.  Returns a promise with the results.
-     */
-    _retrieveResultsHelper(endpoint, jsonMapFunc) {
-        return fetch(endpoint)
-            .then(res => {
-                if (res.status === 200) {
-                    return res.json()
-                        .then(jsonData => jsonData.map(jsonMapFunc));
-                }
-            });
-    }
+Chart.propTypes = {
+    graphTitle: PropTypes.string,
+    graphXAxis: PropTypes.string,
+    graphYAxis: PropTypes.string,
+    config: PropTypes.object,
+    data: PropTypes.array
 };
+
+module.exports = Chart;
