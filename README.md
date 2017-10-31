@@ -7,6 +7,7 @@ This repo is for tracking and displaying various metrics that we want to track o
 The web server will run on port 8000 by default.  The port can be customized by setting the `PORT` env variable, such as:
 `PORT=8888 npm start`
 
+### Pushing/accessing data
 The web server currently serves 3 endpoints:
 * `/` will server the webpage which will display the charts
 * POSTing to `/psnrResult` will allow pushing a new PSNR test result.  The body should be JSON encoded like so:
