@@ -28,7 +28,7 @@ class Chart extends React.Component {
                 <div>Error: {this.state.error}</div>
             );
         }
-        if (this.state.data) {
+        if (this.props.data) {
             const config = {
                 title: {
                     text: this.props.graphTitle
@@ -43,7 +43,7 @@ class Chart extends React.Component {
                         text: this.props.graphXAxis
                     }
                 },
-                series: this.state.data
+                series: this.props.data
             };
 
             return (
@@ -56,47 +56,14 @@ class Chart extends React.Component {
             <div>Loading...</div>
         );
     }
-
-    /**
-     * @inheritdoc
-     */
-    componentDidMount() {
-        const config = this.props.config;
-
-        this._retrieveResultsHelper(config.resultsUrl)
-            .then(jsonData => {
-                const resultData = [];
-
-                config.resultTransformers.forEach(transformer => {
-                    resultData.push(transformer(jsonData));
-                });
-
-                return resultData;
-            })
-            .then(jsonResult => this.setState({ data: jsonResult }))
-            .catch(err => this.setState({ error: err }));
-    }
-
-    /**
-     * Retrieve results from the given endpoint.  If retrieved successfully,
-     * transform the response to json and apply the given function on the
-     * results.  Returns a promise with the results.
-     */
-    _retrieveResultsHelper(endpoint) {
-        return fetch(endpoint)
-            .then(res => {
-                if (res.status === 200) {
-                    return res.json();
-                }
-            });
-    }
 }
 
 Chart.propTypes = {
     graphTitle: PropTypes.string,
     graphXAxis: PropTypes.string,
     graphYAxis: PropTypes.string,
-    config: PropTypes.object
+    config: PropTypes.object,
+    data: PropTypes.array
 };
 
 module.exports = Chart;

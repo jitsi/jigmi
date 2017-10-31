@@ -30,7 +30,7 @@ sequelize
         console.log(`Error connecting to db: ${err}`);
     });
 
-require('./models')(sequelize);
+require('./models/db')(sequelize);
 
 const app = express();
 

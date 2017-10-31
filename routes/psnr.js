@@ -1,4 +1,4 @@
-const PsnrResult = require('../models/psnrResult');
+const PsnrResult = require('../models/db/psnrResult');
 
 module.exports = function(app) {
     app.post('/psnrResult', (req, res) => {
