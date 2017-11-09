@@ -51,6 +51,8 @@ class Dashboard extends React.Component {
                     <Chart
                         graphTitle='PSNR'
                         graphYAxis='PSNR value'
+                        graphYAxisMin={0}
+                        graphYAxisMax={50}
                         graphXAxis='Build number'
                         data={this.state.psnrData}
                     />
@@ -58,6 +60,8 @@ class Dashboard extends React.Component {
                     <Chart
                         graphTitle='Frozen/skipped frames'
                         graphYAxis='% of total frames'
+                        graphYAxisMin={0}
+                        graphYAxisMax={100}
                         graphXAxis='Build number'
                         data={this.state.frameData}
                     />
