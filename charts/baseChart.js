@@ -36,12 +36,15 @@ class Chart extends React.Component {
                 yAxis: {
                     title: {
                         text: this.props.graphYAxis
-                    }
+                    },
+                    min: this.props.graphYAxisMin,
+                    max: this.props.graphYAxisMax
                 },
                 xAxis: {
                     title: {
                         text: this.props.graphXAxis
-                    }
+                    },
+                    step: 1
                 },
                 series: this.props.data
             };
@@ -62,6 +65,8 @@ Chart.propTypes = {
     graphTitle: PropTypes.string,
     graphXAxis: PropTypes.string,
     graphYAxis: PropTypes.string,
+    graphYAxisMin: PropTypes.number,
+    graphYAxisMax: PropTypes.number,
     config: PropTypes.object,
     data: PropTypes.array
 };

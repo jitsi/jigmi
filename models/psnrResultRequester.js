@@ -1,3 +1,15 @@
+/**
+ * Get a percentage value from a numerator, denominator and a precision
+ * value
+ * @param {Number} numerator
+ * @param {Number} denominator
+ * @param {Number} precision the amount of decimal places
+ * @return {Number} a percentage
+ */
+function getPercentage(numerator, denominator, precision = 2) {
+    return parseFloat(((numerator / denominator) * 100).toFixed(precision));
+}
+
 module.exports = class PsnrResultRequester {
     /**
      * Constructor
@@ -65,9 +77,9 @@ module.exports = class PsnrResultRequester {
      */
     getFrameChartData() {
         const frameSkipData = this.jsonData.reduce((currData, currRow) => {
-            const numeratorValue = currRow.numSkippedFrames;
-            const denominatorValue = currRow.totalFrames;
-            const value = numeratorValue / denominatorValue;
+            const numerator = currRow.numSkippedFrames;
+            const denominator = currRow.totalFrames;
+            const value = getPercentage(numerator, denominator);
 
             currData.push([ currRow.buildNum, value ]);
 
@@ -80,9 +92,9 @@ module.exports = class PsnrResultRequester {
         };
 
         const frameFrozenData = this.jsonData.reduce((currData, currRow) => {
-            const numeratorValue = currRow.numFrozenFrames;
-            const denominatorValue = currRow.totalFrames;
-            const value = numeratorValue / denominatorValue;
+            const numerator = currRow.numFrozenFrames;
+            const denominator = currRow.totalFrames;
+            const value = getPercentage(numerator, denominator);
 
             currData.push([ currRow.buildNum, value ]);
 
