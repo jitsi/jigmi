@@ -9,18 +9,21 @@ const config = {
     },
 
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.js?$/,
                 exclude: /node_modules/,
-                loader: 'babel-loader',
-
-                query: {
-                    presets: [ 'es2015', 'react' ]
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [ '@babel/preset-react' ]
+                    }
                 }
             }
         ]
-    }
+    },
+
+    mode: 'development'
 };
 
 module.exports = config;
