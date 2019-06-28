@@ -6,7 +6,7 @@ import ReactHighcharts from 'react-highcharts';
 /**
  * Component representing a single chart
  */
-class Chart extends React.Component {
+export default class Chart extends React.Component {
     /**
      * Create a new chart
      * @param props props of the chart
@@ -70,5 +70,3 @@ Chart.propTypes = {
     config: PropTypes.object,
     data: PropTypes.array
 };
-
-module.exports = Chart;
