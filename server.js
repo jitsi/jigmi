@@ -21,15 +21,6 @@ const sequelize = new Sequelize('dashboard', null, null, {
     operatorsAliases: Sequelize.Op
 });
 
-sequelize
-    .authenticate()
-    .then(() => {
-        console.log('Successfully connected to db');
-    })
-    .catch(err => {
-        console.log(`Error connecting to db: ${err}`);
-    });
-
 require('./models/db')(sequelize);
 
 const app = express();
@@ -46,9 +37,28 @@ require('./routes')(app);
 
 const port = process.env.PORT || 8000;
 
-// Sync the db
-sequelize.sync().then(() => {
-    http.createServer(app).listen(port, () => {
-        console.log(`Server listening on ${port}`);
-    });
-});
+/**
+ * Run the server
+ */
+async function run() {
+    try {
+        await sequelize.authenticate();
+        console.log('Successfully connected to db');
+    } catch (err) {
+        console.log(`Error connecting to db: ${err}`);
+
+        return;
+    }
+
+    // Sync the db
+    try {
+        await sequelize.sync();
+        http.createServer(app).listen(port, () => {
+            console.log(`Server listening on ${port}`);
+        });
+    } catch (err) {
+        console.log(`Error syncing db: ${err}`);
+    }
+}
+
+run();
