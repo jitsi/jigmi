@@ -10,32 +10,25 @@ function getPercentage(numerator, denominator, precision = 2) {
     return parseFloat(((numerator / denominator) * 100).toFixed(precision));
 }
 
+const URL = './psnrResults';
+
 module.exports = class PsnrResultRequester {
-    /**
-     * Constructor
-     */
-    constructor() {
-        this.url = './psnrResults';
-    }
 
     /**
      * Fetch the psnr test result endpoint to retrieve
-     * the historical date
+     * the historical data.
+     *
+     * @return a JSON object of the data or throws if
+     * the request failed.
      */
-    fetch() {
-        return new Promise((resolve, reject) => {
-            fetch(this.url)
-                .then(res => {
-                    if (res.status === 200) {
-                        res.json().then(jsonData => {
-                            this.jsonData = jsonData;
-                            resolve();
-                        });
-                    } else {
-                        reject();
-                    }
-                });
-        });
+    static async fetchPsnrResults() {
+        const result = await fetch(URL);
+
+        if (result.status !== 200) {
+            throw new Error('Error retrieving PSNR result data');
+        }
+
+        return await result.json();
     }
 
     /**
@@ -45,11 +38,13 @@ module.exports = class PsnrResultRequester {
      * build a series where the x axis is the jenkins build
      * number and the y axis is the psnr value for that build.
      *
+     * @param {Object} jsonData - The PSNR JSON data retrieved from
+     * the psnrResults endpoint
      * @returns an object suitable to be placed in a series array
      * for a highchart
      */
-    getPsnrChartData() {
-        const psnrData = this.jsonData.reduce((currData, currRow) => {
+    static getPsnrChartData(jsonData) {
+        const psnrData = jsonData.reduce((currData, currRow) => {
             currData.push([ currRow.buildNum, currRow.psnr ]);
 
             return currData;
@@ -72,11 +67,13 @@ module.exports = class PsnrResultRequester {
      * 1) where the y axis is the percent of skipped frames
      * 2) where the y axis is the percent of frozen frames
      *
+     * @param {Object} jsonData - The PSNR JSON data retrieved from
+     * the psnrResults endpoint
      * @returns an object suitable to be placed in a series array
      * for a highchart
      */
-    getFrameChartData() {
-        const frameSkipData = this.jsonData.reduce((currData, currRow) => {
+    static getFrameChartData(jsonData) {
+        const frameSkipData = jsonData.reduce((currData, currRow) => {
             const numerator = currRow.numSkippedFrames;
             const denominator = currRow.totalFrames;
             const value = getPercentage(numerator, denominator);
@@ -91,7 +88,7 @@ module.exports = class PsnrResultRequester {
             data: frameSkipData
         };
 
-        const frameFrozenData = this.jsonData.reduce((currData, currRow) => {
+        const frameFrozenData = jsonData.reduce((currData, currRow) => {
             const numerator = currRow.numFrozenFrames;
             const denominator = currRow.totalFrames;
             const value = getPercentage(numerator, denominator);

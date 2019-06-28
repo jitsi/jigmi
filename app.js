@@ -6,33 +6,24 @@ import PsnrResultRequester from './models/psnrResultRequester';
  * Component for displaying the top-level dashboard
  */
 class Dashboard extends React.Component {
-    /**
-     * @inheritdoc
-     */
-    constructor(props) {
-        super(props);
-        this.psnrResultRequester = new PsnrResultRequester();
-    }
 
     /**
      * @inheritdoc
      */
-    componentDidMount() {
+    async componentDidMount() {
         // Retrieve the data from the psnr test which will be used by
         // the psnr and frame charts.  We do it here so we only make
         // the request once.
-        this.psnrResultRequester.fetch()
-            .then(() => {
-                this.setState({
-                    psnrData: this.psnrResultRequester.getPsnrChartData(),
-                    frameData: this.psnrResultRequester.getFrameChartData()
-                });
-            })
-            .catch(error => {
-                this.setState({
-                    error
-                });
+        try {
+            const jsonData = await PsnrResultRequester.fetchPsnrResults();
+
+            this.setState({
+                psnrData: PsnrResultRequester.getPsnrChartData(jsonData),
+                frameData: PsnrResultRequester.getFrameChartData(jsonData)
             });
+        } catch (e) {
+            this.setState({ e });
+        }
     }
 
     /**
