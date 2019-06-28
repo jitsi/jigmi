@@ -1,7 +1,8 @@
 const PsnrResult = require('../models/db/psnrResult');
 
 module.exports = function(app) {
-    app.post('/psnrResult', (req, res) => {
+    // eslint-disable-next-line space-before-function-paren
+    app.post('/psnrResult', async (req, res) => {
         const {
             buildNum,
             buildUrl,
@@ -18,30 +19,31 @@ module.exports = function(app) {
             + ` for build num ${buildNum}`
             + ` url ${buildUrl}`);
 
-        PsnrResult.create({
-            buildNum,
-            buildUrl,
-            psnr,
-            numFrozenFrames,
-            numSkippedFrames,
-            totalFrames
-        })
-        .then(createdPsnrResult => { // eslint-disable-line no-unused-vars
+        try {
+            await PsnrResult.create({
+                buildNum,
+                buildUrl,
+                psnr,
+                numFrozenFrames,
+                numSkippedFrames,
+                totalFrames
+            });
             res.sendStatus(200);
-        })
-        .catch(err => {
+        } catch (err) {
             console.log(`Error inserting psnrResult: ${err}`);
             res.sendStatus(500);
-        });
+        }
     });
 
-    app.get('/psnrResults', (req, res) => {
-        PsnrResult.findAll().then(psnrResults => {
+    // eslint-disable-next-line space-before-function-paren
+    app.get('/psnrResults', async (req, res) => {
+        try {
+            const psnrResults = await PsnrResult.findAll();
+
             res.send(psnrResults.map(result => result.toJSON()));
-        })
-        .catch(err => {
+        } catch (err) {
             console.log(`Error querying psnr results: ${err}`);
             res.sendStatus(500);
-        });
+        }
     });
 };
