@@ -1,6 +1,6 @@
 import React from 'react';
 import Chart from './charts/baseChart';
-import PsnrResultRequester from './models/psnrResultRequester';
+import PsnrResultRequester from './psnrResultRequester';
 
 /**
  * Component for displaying the top-level dashboard
