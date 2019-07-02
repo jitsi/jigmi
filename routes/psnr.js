@@ -1,6 +1,6 @@
-const PsnrResult = require('../models/db/psnrResult');
+module.exports = function(app, sequelize) {
+    const PsnrResult = sequelize.models.PsnrResult;
 
-module.exports = function(app) {
     // eslint-disable-next-line space-before-function-paren
     app.post('/psnrResult', async (req, res) => {
         const {
@@ -38,6 +38,7 @@ module.exports = function(app) {
     // eslint-disable-next-line space-before-function-paren
     app.get('/psnrResults', async (req, res) => {
         try {
+            console.log(PsnrResult);
             const psnrResults = await PsnrResult.findAll();
 
             res.send(psnrResults.map(result => result.toJSON()));
