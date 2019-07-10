@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
         numFrozenFrames: DataTypes.INTEGER,
         numSkippedFrames: DataTypes.INTEGER,
         totalFrames: DataTypes.INTEGER,
-        buildDate: DataTypes.DATE
+        buildDate: DataTypes.DATE,
+        projectName: DataTypes.STRING
     }, {});
 
     PsnrResult.associate = function(/* models */) {
