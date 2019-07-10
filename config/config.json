@@ -3,23 +3,7 @@
     "username": null,
     "password": null,
     "database": "database_development",
-    "storage": "db/dev.db",
-    "dialect": "sqlite",
-    "operatorsAliases": false
-  },
-  "test": {
-    "username": null,
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "dialect": "sqlite",
-    "operatorsAliases": false
-  },
-  "production": {
-    "username": null,
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
+    "storage": "db/sequelize.db",
     "dialect": "sqlite",
     "operatorsAliases": false
   }
