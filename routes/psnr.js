@@ -6,6 +6,8 @@ module.exports = function(app, sequelize) {
         const {
             buildNum,
             buildUrl,
+            buildDate,
+            projectName,
             psnr,
             numFrozenFrames,
             numSkippedFrames,
@@ -17,12 +19,15 @@ module.exports = function(app, sequelize) {
             + ` numSkippedFrames ${numSkippedFrames},`
             + ` totalFrames ${totalFrames},`
             + ` for build num ${buildNum}`
-            + ` url ${buildUrl}`);
+            + ` url ${buildUrl} project ${projectName} on`
+            + ` ${buildDate}`);
 
         try {
             await PsnrResult.create({
                 buildNum,
                 buildUrl,
+                buildDate,
+                projectName,
                 psnr,
                 numFrozenFrames,
                 numSkippedFrames,

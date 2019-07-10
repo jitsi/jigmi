@@ -44,18 +44,62 @@ module.exports = class PsnrResultRequester {
      * for a highchart
      */
     static getPsnrChartData(jsonData) {
-        const psnrData = jsonData.reduce((currData, currRow) => {
-            currData.push([ new Date(currRow.buildDate).getTime(), currRow.psnr ]);
+        const psnrDataByProject = {};
 
-            return currData;
-        }, []);
+        jsonData.forEach(currData => {
+            const {
+                projectName,
+                buildDate,
+                psnr
+            } = currData;
 
-        return [
-            {
-                name: 'psnr',
-                data: psnrData
+            if (!(projectName in psnrDataByProject)) {
+                psnrDataByProject[projectName] = [];
             }
-        ];
+            psnrDataByProject[projectName].push([ new Date(buildDate).getTime(), psnr ]);
+        });
+
+        const results = [];
+
+        Object.entries(psnrDataByProject).forEach(entry => {
+            results.push({
+                name: entry[0],
+                data: entry[1]
+            });
+        });
+
+        return results;
+    }
+
+    /**
+     * A helper method to extract data from the overall frame date.
+     *
+     * @param jsonData {Array} the raw frame data
+     * @param valueProcessingFunc {Function} a function which will take in
+     * a 'row' of the JSON data and return a desired 'value' for the chart
+     * @returns {Object} an object of the following format:
+     * {
+     *      projectName1: [ [x value 1, y value 1], [x value 2, y value 2]... ],
+     *      projectName2: [ [x value 1, y value 1], [x value 2, y value 2]... ],
+     * }
+     */
+    static _getFrameChartDataHelper(jsonData, valueProcessingFunc) {
+        const frameDataByProject = {};
+
+        jsonData.forEach(currData => {
+            const {
+                projectName,
+                buildDate
+            } = currData;
+            const value = valueProcessingFunc(currData);
+
+            if (!(projectName in frameDataByProject)) {
+                frameDataByProject[projectName] = [];
+            }
+            frameDataByProject[projectName].push([ new Date(buildDate).getTime(), value ]);
+        });
+
+        return frameDataByProject;
     }
 
     /**
@@ -73,36 +117,42 @@ module.exports = class PsnrResultRequester {
      * for a highchart
      */
     static getFrameChartData(jsonData) {
-        const frameSkipData = jsonData.reduce((currData, currRow) => {
-            const numerator = currRow.numSkippedFrames;
-            const denominator = currRow.totalFrames;
-            const value = getPercentage(numerator, denominator);
+        const frameSkipDataByProject = PsnrResultRequester._getFrameChartDataHelper(
+            jsonData,
+            currData => {
+                const numerator = currData.numSkippedFrames;
+                const denominator = currData.totalFrames;
 
-            currData.push([ new Date(currRow.buildDate).getTime(), value ]);
+                return getPercentage(numerator, denominator);
+            }
+        );
 
-            return currData;
-        }, []);
+        const frameFrozenDataByProject = PsnrResultRequester._getFrameChartDataHelper(
+            jsonData,
+            currData => {
+                const numerator = currData.numFrozenFrames;
+                const denominator = currData.totalFrames;
 
-        const frameSkipSeries = {
-            name: 'skipped frames',
-            data: frameSkipData
-        };
+                return getPercentage(numerator, denominator);
+            }
+        );
 
-        const frameFrozenData = jsonData.reduce((currData, currRow) => {
-            const numerator = currRow.numFrozenFrames;
-            const denominator = currRow.totalFrames;
-            const value = getPercentage(numerator, denominator);
+        const results = [];
 
-            currData.push([ new Date(currRow.buildDate).getTime(), value ]);
+        Object.entries(frameSkipDataByProject).forEach(entry => {
+            results.push({
+                name: `${entry[0]}-skipped frames`,
+                data: entry[1]
+            });
+        });
 
-            return currData;
-        }, []);
+        Object.entries(frameFrozenDataByProject).forEach(entry => {
+            results.push({
+                name: `${entry[0]}-frozen frames`,
+                data: entry[1]
+            });
+        });
 
-        const frameFrozenSeries = {
-            name: 'frozen frames',
-            data: frameFrozenData
-        };
-
-        return [ frameSkipSeries, frameFrozenSeries ];
+        return results;
     }
 };
