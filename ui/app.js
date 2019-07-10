@@ -44,7 +44,7 @@ class Dashboard extends React.Component {
                         graphYAxis='PSNR value'
                         graphYAxisMin={0}
                         graphYAxisMax={50}
-                        graphXAxis='Build number'
+                        graphXAxis='Build date'
                         data={this.state.psnrData}
                     />
 

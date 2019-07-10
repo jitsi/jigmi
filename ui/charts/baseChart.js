@@ -44,9 +44,17 @@ export default class Chart extends React.Component {
                     title: {
                         text: this.props.graphXAxis
                     },
-                    step: 1
+                    type: 'datetime',
+                    labels: {
+                        format: '{value:%m/%y}'
+                    }
                 },
-                series: this.props.data
+                series: this.props.data,
+                tooltip: {
+                    dateTimeLabelFormats: {
+                        millisecond: '%A, %B %e, %Y'
+                    }
+                }
             };
 
             return (

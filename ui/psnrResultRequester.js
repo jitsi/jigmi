@@ -45,7 +45,7 @@ module.exports = class PsnrResultRequester {
      */
     static getPsnrChartData(jsonData) {
         const psnrData = jsonData.reduce((currData, currRow) => {
-            currData.push([ currRow.buildNum, currRow.psnr ]);
+            currData.push([ new Date(currRow.buildDate).getTime(), currRow.psnr ]);
 
             return currData;
         }, []);
@@ -78,7 +78,7 @@ module.exports = class PsnrResultRequester {
             const denominator = currRow.totalFrames;
             const value = getPercentage(numerator, denominator);
 
-            currData.push([ currRow.buildNum, value ]);
+            currData.push([ new Date(currRow.buildDate).getTime(), value ]);
 
             return currData;
         }, []);
@@ -93,7 +93,7 @@ module.exports = class PsnrResultRequester {
             const denominator = currRow.totalFrames;
             const value = getPercentage(numerator, denominator);
 
-            currData.push([ currRow.buildNum, value ]);
+            currData.push([ new Date(currRow.buildDate).getTime(), value ]);
 
             return currData;
         }, []);
