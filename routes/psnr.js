@@ -38,8 +38,9 @@ module.exports = function(app, sequelize) {
     // eslint-disable-next-line space-before-function-paren
     app.get('/psnrResults', async (req, res) => {
         try {
-            console.log(PsnrResult);
-            const psnrResults = await PsnrResult.findAll();
+            const psnrResults = await PsnrResult.findAll({
+                order: sequelize.col('buildDate')
+            });
 
             res.send(psnrResults.map(result => result.toJSON()));
         } catch (err) {
