@@ -6,7 +6,6 @@ import PsnrResultRequester from './psnrResultRequester';
  * Component for displaying the top-level dashboard
  */
 class Dashboard extends React.Component {
-
     /**
      * @inheritdoc
      */
@@ -21,8 +20,8 @@ class Dashboard extends React.Component {
                 psnrData: PsnrResultRequester.getPsnrChartData(jsonData),
                 frameData: PsnrResultRequester.getFrameChartData(jsonData)
             });
-        } catch (e) {
-            this.setState({ e });
+        } catch (error) {
+            this.setState({ error });
         }
     }
 
@@ -33,7 +32,7 @@ class Dashboard extends React.Component {
         if (this.state) {
             if (this.state.error) {
                 return (
-                    <div>Error: {this.state.error}</div>
+                    <pre>Error: {this.state.error.stack}</pre>
                 );
             }
 
