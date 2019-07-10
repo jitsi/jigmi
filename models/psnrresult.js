@@ -1,9 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
     const PsnrResult = sequelize.define('PsnrResult', {
-        buildNum: {
+        id: {
             type: DataTypes.INTEGER,
             primaryKey: true
         },
+        buildNum: DataTypes.INTEGER,
         buildUrl: DataTypes.STRING,
         psnr: DataTypes.FLOAT,
         numFrozenFrames: DataTypes.INTEGER,
