@@ -1,0 +1,10 @@
+{
+  "development": {
+    "username": null,
+    "password": null,
+    "database": "database_development",
+    "storage": "db/sequelize.db",
+    "dialect": "sqlite",
+    "operatorsAliases": false
+  }
+}
